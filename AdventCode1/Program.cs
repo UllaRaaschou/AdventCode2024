@@ -1,4 +1,4 @@
-﻿using AdventCode1;
+﻿using AdventCode2024;
 class Program
 {
     static void Main()

@@ -1,9 +1,9 @@
-using AdventCode1;
+using AdventCode2024;
 
 namespace TestProjectAdvent
 {
     [TestClass]
-    public class CodeDayOneTest
+    public class CodeDayOneTests
     {
         
         [TestMethod]

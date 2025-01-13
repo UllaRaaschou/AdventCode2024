@@ -4,7 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AdventCode1
+namespace AdventCode2024
+
 {
     public static class CodeDayOne
     {
