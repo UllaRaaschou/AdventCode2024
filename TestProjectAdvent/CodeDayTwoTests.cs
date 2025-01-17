@@ -96,12 +96,18 @@ namespace TestProjectAdvent
 
             //Act
 
-            List<int[]> acceptedRecords = CodeDayTwo.ReportsWithMaxOneRejectedLevelDifferences(reports);
+            (List<int[]>, List<int[]>) acceptedRecords = CodeDayTwo.ReportsWithMaxOneRejectedLevelDifferences(reports);
 
             //Assert
-            CollectionAssert.AreEqual(reports[3],acceptedRecords[0]);
-            CollectionAssert.AreEqual(reports[4], acceptedRecords[1]);
-            CollectionAssert.AreEqual(reports[5], acceptedRecords[2]);            
+            //Assert.AreEqual(reports[0], acceptedRecords.Item2[0]);
+            CollectionAssert.AreEqual(reports[1], acceptedRecords.Item2[0]);
+            CollectionAssert.AreEqual(reports[2], acceptedRecords.Item2[1]);
+            CollectionAssert.AreEqual(reports[3], acceptedRecords.Item1[0]);
+            CollectionAssert.AreEqual(reports[4], acceptedRecords.Item1[1]);
+            CollectionAssert.AreEqual(reports[5], acceptedRecords.Item2[2]);
+
+
+
         }
 
         [TestMethod]
@@ -120,12 +126,65 @@ namespace TestProjectAdvent
 
             //Act
 
-            int acceptedRecords = CodeDayTwo.ReportsWithMaxOneAscOrDescErrorLevel(reports);
+            (int count, List<int[]> acceptedRecords) = CodeDayTwo.ReportsWithMaxOneAscOrDescErrorLevel(reports);
 
             //Assert
-            Assert.AreEqual(2, acceptedRecords);
+            Assert.AreEqual(3, count);
+            CollectionAssert.AreEqual(new List<int[]> { reports[2], reports[3], reports[5] }, acceptedRecords);
         }
 
+        //[TestMethod]
+        //public void Test_CombiOfNonSortedLevelDiffAndRemovedAscDesc() 
+        //{
+        //    // Arrange
+        //    List<int[]> reports = new List<int[]>
+        //    {
+        //        new int[] { 7, 6, 4, 2, 1 },
+        //        new int[] { 1, 2, 7, 8, 9 },
+        //        new int[] { 9, 7, 6, 2, 1 },
+        //        new int[] { 1, 3, 2, 4, 5 },
+        //        new int[] { 8, 6, 4, 4, 1 },
+        //        new int[] {1, 3, 6, 7, 9 }
+        //    };
+
+        //    //Act
+        //    List<int[]> okLevelDiff = CodeDayTwo
+        //                           .ReportsWithOKLevelDifferences(reports);
+
+        //    int safeReports1 = CodeDayTwo
+        //                        .ReportsWithMaxOneAscOrDescErrorLevel(okLevelDiff);
+
+
+        //    //Assert
+        //    Assert.AreEqual(3, safeReports1);
+        //}
+
+        //[TestMethod]    
+        //public void Test_CombiOfRemovedLevelDiffAndNotSortedAscDesc() 
+        //{
+        //    // Arrange
+        //    List<int[]> reports = new List<int[]>
+        //    {
+        //        new int[] { 7, 6, 4, 2, 1 },
+        //        new int[] { 1, 2, 7, 8, 9 },
+        //        new int[] { 9, 7, 6, 2, 1 },
+        //        new int[] { 1, 3, 2, 4, 5 },
+        //        new int[] { 8, 6, 4, 4, 1 },
+        //        new int[] {1, 3, 6, 7, 9 }
+        //    };
+
+        //    //Act
+
+        //    List<int[]> levelDiffRemoved = CodeDayTwo
+        //                                     .ReportsWithMaxOneRejectedLevelDifferences(reports);
+
+        //    int safeReports2 = CodeDayTwo
+        //                        .ReportsWithAllLevelsAscOrDesc(levelDiffRemoved);
+
+        //    //Assert
+        //    Assert.AreEqual(4, safeReports2);
+
+        //}
 
     }
 }

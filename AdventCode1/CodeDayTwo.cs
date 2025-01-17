@@ -72,14 +72,16 @@ namespace AdventCode2024
             return counterOfAcceptedReports;
         }
 
-        public static List<int[]> ReportsWithMaxOneRejectedLevelDifferences(List<int[]> reports)
+        public static (List<int[]>, List<int[]>) ReportsWithMaxOneRejectedLevelDifferences(List<int[]> reports)
         {
-            List<int[]> acceptedReports = new List<int[]>();
+            List<int[]> acceptedReportsWithOutDeletions = new List<int[]>();
+            List<int[]> acceptedReportsWithOneDeletion = new List<int[]>();
 
             foreach (int[] reportArray in reports)
             {
                 List<int> report = reportArray.ToList();
                 List<int> differences = report.Zip(report.Skip(1), (a, b) => Math.Abs(a - b)).ToList();
+                List<int> updatedDifferences = new List<int>();
                 bool allDifferencesAccepted = true;
 
                 foreach (int diff in differences)
@@ -87,9 +89,24 @@ namespace AdventCode2024
                     if (diff > 3)
                     {
                         int index = differences.IndexOf(diff);
-                        int reportItem = report[index];
+                        int reportItem = report[index + 1];
                         report.Remove(reportItem);
                         if (report.Count < reportArray.Length - 1)
+                        {
+                            Console.WriteLine($"Reports rejected because of more than one level difference: {string.Join(" ", reportArray)}");
+                            allDifferencesAccepted = false;
+                            break;
+                        }
+                        updatedDifferences = (report.Zip(report.Skip(1), (a, b) => Math.Abs(a - b)).Skip(index).ToList());
+                        break;                       
+                    }
+                }
+                if(updatedDifferences.Count> 0)
+                {
+
+                    foreach(int diff in updatedDifferences) 
+                    {
+                        if(diff > 3) 
                         {
                             Console.WriteLine($"Reports rejected because of more than one level difference: {string.Join(" ", reportArray)}");
                             allDifferencesAccepted = false;
@@ -98,17 +115,37 @@ namespace AdventCode2024
                     }
                 }
 
-                if (allDifferencesAccepted)
+                if (report.Count == reportArray.Length)
                 {
-                    acceptedReports.Add(reportArray);
+                    acceptedReportsWithOutDeletions.Add(report.ToArray());
+                }
+                if (report.Count == reportArray.Length - 1 && allDifferencesAccepted == true)
+                {
+                    acceptedReportsWithOneDeletion.Add(reportArray);
                 }
             }
-            return acceptedReports;
+
+            Console.WriteLine("Reports accepted without deletions:");
+            foreach (int[] reportArray in acceptedReportsWithOutDeletions)
+            {
+                string reportString = string.Join(" ", reportArray);
+                Console.WriteLine(reportString);
+            }
+
+            Console.WriteLine("Reports accepted with one deletion:");
+            foreach (int[] reportArray in acceptedReportsWithOneDeletion)
+            {
+                string reportString = string.Join(" ", reportArray);
+                Console.WriteLine(reportString);
+            }
+
+            return (acceptedReportsWithOutDeletions, acceptedReportsWithOneDeletion);
         }
 
-        public static int ReportsWithMaxOneAscOrDescErrorLevel(List<int[]> reports)
+        public static (int, List<int[]>) ReportsWithMaxOneAscOrDescErrorLevel(List<int[]> reports)
         {
             int counterOfAcceptedReports = 0;
+            List<int[]> acceptedReports = new List<int[]>();
             bool mostAsc = false;
             bool mostDesc = false;
             bool allAscOrDesc = false;
@@ -140,10 +177,11 @@ namespace AdventCode2024
                     ascOrDesc = isEachStepDesc;
                 }
 
-                bool allAscOrAllDesc = isEachStepAsc.All(step => step == true);
+                bool allAscOrAllDesc = ascOrDesc.All(step => step == true);
                 if (allAscOrAllDesc)
                 {
                     counterOfAcceptedReports++;
+                    acceptedReports.Add(reportArray);
                 }
 
                 for (int i = 0; i < ascOrDesc.Count(); i++)
@@ -160,12 +198,17 @@ namespace AdventCode2024
                             break;
                         }
                         counterOfAcceptedReports++;
+                        acceptedReports.Add(reportArray);
                     }                    
                 }                  
                 
             }
-            return counterOfAcceptedReports;
+            //Console.WriteLine($"Reports accepted as : {counterOfAcceptedReports}");
+            return (counterOfAcceptedReports, acceptedReports);
         }
+
+
+        
     }
 }
 

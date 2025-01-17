@@ -31,21 +31,28 @@ class Program
         //List<int[]> okLevelDifferncesPartOne = CodeDayTwo
         //                           .ReportsWithOKLevelDifferences(inputArrays);
 
-        //int totalacceptedReportsPartOne = CodeDayTwo
+        //int OkLevelAscOrDescPartOne = CodeDayTwo
         //                           .ReportsWithAllLevelsAscOrDesc(okLevelDifferncesPartOne);
 
 
         // *** part TWO ***
 
-        List<int[]> partlyAcceptedReports = CodeDayTwo
-                                                        .ReportsWithMaxOneRejectedLevelDifferences(inputArrays);
 
-        int totalacceptedReports = CodeDayTwo
-                                   .ReportsWithAllLevelsAscOrDesc(partlyAcceptedReports);
+        //List<int[]> okLevelDiff= CodeDayTwo
+        //                           .ReportsWithOKLevelDifferences(inputArrays);
 
-              
+        //int safeReports1 = CodeDayTwo
+        //                    .ReportsWithMaxOneAscOrDescErrorLevel(okLevelDiff);
 
-        Console.WriteLine($"Total accepted reportsNow: {totalacceptedReports}");
+        //List<int[]> levelDiffRemoved= CodeDayTwo
+        //                                .ReportsWithMaxOneRejectedLevelDifferences(inputArrays);
+
+        //int safeReports2 = CodeDayTwo
+        //                    .ReportsWithAllLevelsAscOrDesc(levelDiffRemoved);
+
+
+
+        //Console.WriteLine($"Total accepted reportsNow: {safeReports1}, {safeReports2}");
 
 
 
