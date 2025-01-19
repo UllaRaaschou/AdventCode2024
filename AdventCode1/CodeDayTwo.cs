@@ -86,11 +86,11 @@ namespace AdventCode2024
 
                 foreach (int diff in differences)
                 {
-                    if (diff > 3)
+                    if (diff > 3 || diff <1)
                     {
                         int index = differences.IndexOf(diff);
-                        int reportItem = report[index + 1];
-                        report.Remove(reportItem);
+                        //int removeIndex = report[index + 1];
+                        report.RemoveAt(index + 1);
                         if (report.Count < reportArray.Length - 1)
                         {
                             Console.WriteLine($"Reports rejected because of more than one level difference: {string.Join(" ", reportArray)}");
@@ -121,23 +121,9 @@ namespace AdventCode2024
                 }
                 if (report.Count == reportArray.Length - 1 && allDifferencesAccepted == true)
                 {
-                    acceptedReportsWithOneDeletion.Add(reportArray);
+                    acceptedReportsWithOneDeletion.Add(report.ToArray());
                 }
-            }
-
-            Console.WriteLine("Reports accepted without deletions:");
-            foreach (int[] reportArray in acceptedReportsWithOutDeletions)
-            {
-                string reportString = string.Join(" ", reportArray);
-                Console.WriteLine(reportString);
-            }
-
-            Console.WriteLine("Reports accepted with one deletion:");
-            foreach (int[] reportArray in acceptedReportsWithOneDeletion)
-            {
-                string reportString = string.Join(" ", reportArray);
-                Console.WriteLine(reportString);
-            }
+            }           
 
             return (acceptedReportsWithOutDeletions, acceptedReportsWithOneDeletion);
         }
@@ -149,7 +135,8 @@ namespace AdventCode2024
             bool mostAsc = false;
             bool mostDesc = false;
             bool allAscOrDesc = false;
-            bool allAscOrDescAfterRemoval = false;            
+            bool allAscAfterRemoval = false;
+            bool allDescAfterRemoval = false;
 
             foreach (int[] reportArray in reports)
             {
@@ -165,44 +152,50 @@ namespace AdventCode2024
                 List<bool> isEachStepDesc = report.Zip(report.Skip(1), (a, b) => (a > b)).ToList();
 
                 mostAsc = isEachStepAsc.Count(step => step == true) > isEachStepAsc.Count(step => step == false);  
-                mostDesc = !mostAsc;
+                mostDesc = isEachStepDesc.Count(step => step == true) > isEachStepDesc.Count(step => step == false);
 
-                List<bool> ascOrDesc;
-                if (mostAsc)
+                if(mostAsc == true || mostDesc == true)
                 {
-                    ascOrDesc = isEachStepAsc;                    
-                }
-                else
-                {
-                    ascOrDesc = isEachStepDesc;
-                }
-
-                bool allAscOrAllDesc = ascOrDesc.All(step => step == true);
-                if (allAscOrAllDesc)
-                {
-                    counterOfAcceptedReports++;
-                    acceptedReports.Add(reportArray);
-                }
-
-                for (int i = 0; i < ascOrDesc.Count(); i++)
-                {
-                    if (ascOrDesc[i] == false)
+                    List<bool> ascOrDesc;
+                    if (mostAsc)
                     {
-                        int item = report[i + 1];
-                        report.Remove(item);
+                        ascOrDesc = isEachStepAsc;
+                    }
+                    else
+                    {
+                        ascOrDesc = isEachStepDesc;
+                    }
 
-                        allAscOrDescAfterRemoval = report.Zip(report.Skip(1), (a, b) => (a < b)).All(pair => pair);
-                        if (allAscOrDescAfterRemoval == false)
-                        {
-                            Console.WriteLine($"Reports rejected because of not all asc or all desc after removal : {string.Join(" ", reportArray)}");
-                            break;
-                        }
+                    bool allAscOrAllDesc = ascOrDesc.All(step => step == true);
+                    if (allAscOrAllDesc)
+                    {
                         counterOfAcceptedReports++;
                         acceptedReports.Add(reportArray);
-                    }                    
-                }                  
-                
+                        continue;
+                    }
+
+                    for (int i = 0; i < ascOrDesc.Count(); i++)
+                    {
+                        if (ascOrDesc[i] == false)
+                        {
+                            report.RemoveAt(i + 1);
+
+                            allAscAfterRemoval = report.Zip(report.Skip(1), (a, b) => (a < b)).All(pair => pair);
+                            allDescAfterRemoval = report.Zip(report.Skip(1), (a, b) => (a > b)).All(pair => pair);
+
+                            if (allAscAfterRemoval == false && allDescAfterRemoval == false)
+                            {
+                                Console.WriteLine($"Reports rejected because of not all asc or all desc after removal : {string.Join(" ", reportArray)}");
+                                break;
+                            }
+                            counterOfAcceptedReports++;
+                            acceptedReports.Add(reportArray);
+                        }
+                    }
+                }                
+
             }
+
             //Console.WriteLine($"Reports accepted as : {counterOfAcceptedReports}");
             return (counterOfAcceptedReports, acceptedReports);
         }

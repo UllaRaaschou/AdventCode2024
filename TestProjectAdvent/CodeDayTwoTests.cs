@@ -86,28 +86,24 @@ namespace TestProjectAdvent
             // Arrange
             List<int[]> reports = new List<int[]>
             {
-                new int[] { 2, 4, 6, 1, 5 },
-                new int[] { 3, 6, 3, 12, 5 },
-                new int[] { 0, 4, 7, 2, 8 },
-                new int[] { 1, 2, 3, 4, 5 },
-                new int[] { 3, 6, 3, 4, 7, 8 },
-                new int[] {11, 8, 7, 4, 11 }
-            };
+                new int[] { 7, 6, 4, 2, 1 },    // not changed
+                new int[] { 1, 2, 7, 8, 9 },    // error
+                new int[] { 9, 7, 6, 2, 1 },    // error
+                new int[] { 1, 3, 2, 4, 5 },    // not changed
+                new int[] { 8, 6, 4, 4, 1 },    // removed 4
+                new int[] {1, 3, 6, 7, 9 }      // not changed
+            }; 
 
             //Act
 
             (List<int[]>, List<int[]>) acceptedRecords = CodeDayTwo.ReportsWithMaxOneRejectedLevelDifferences(reports);
 
             //Assert
-            //Assert.AreEqual(reports[0], acceptedRecords.Item2[0]);
-            CollectionAssert.AreEqual(reports[1], acceptedRecords.Item2[0]);
-            CollectionAssert.AreEqual(reports[2], acceptedRecords.Item2[1]);
-            CollectionAssert.AreEqual(reports[3], acceptedRecords.Item1[0]);
-            CollectionAssert.AreEqual(reports[4], acceptedRecords.Item1[1]);
-            CollectionAssert.AreEqual(reports[5], acceptedRecords.Item2[2]);
-
-
-
+            CollectionAssert.AreEqual(new int[] { 7, 6, 4, 2, 1 }, acceptedRecords.Item1[0]);
+            CollectionAssert.AreEqual(new int[] { 1, 3, 2, 4, 5 }, acceptedRecords.Item1[1]);
+            CollectionAssert.AreEqual(new int[] { 8, 6, 4, 1 }, acceptedRecords.Item2[0]);
+            CollectionAssert.AreEqual(new int[] { 1, 3, 6, 7, 9 }, acceptedRecords.Item1[2]);
+           
         }
 
         [TestMethod]
@@ -116,75 +112,56 @@ namespace TestProjectAdvent
             // Arrange
             List<int[]> reports = new List<int[]>
             {
-                new int[] { 2, 4, 6, 1, 5 },
-                new int[] { 3, 6, 3, 12, 5 },
-                new int[] { 0, 4, 7, 2, 8 },
-                new int[] { 1, 2, 3, 4, 5 },
-                new int[] { 3, 6, 3, 4, 7, 8 },
-                new int[] {11, 8, 7, 4, 11 }
+                new int[] { 7, 6, 4, 2, 1 },    // not changed
+                new int[] { 1, 3, 2, 4, 5 },    // not changed
+                new int[] { 8, 6, 4, 1 },       // removed 4
+                new int[] {1, 3, 6, 7, 9 }      // not changed
             };
 
             //Act
-
             (int count, List<int[]> acceptedRecords) = CodeDayTwo.ReportsWithMaxOneAscOrDescErrorLevel(reports);
 
             //Assert
-            Assert.AreEqual(3, count);
-            CollectionAssert.AreEqual(new List<int[]> { reports[2], reports[3], reports[5] }, acceptedRecords);
+            Assert.AreEqual(4,  count);
+            CollectionAssert.AreEqual(new int[] { 7, 6, 4, 2, 1 }, acceptedRecords[0]);
+            CollectionAssert.AreEqual(new int[] { 1, 3, 2, 4, 5 }, acceptedRecords[1]);
+            CollectionAssert.AreEqual(new int[] { 8, 6, 4, 1 }, acceptedRecords[2]);
+            CollectionAssert.AreEqual(new int[] { 1, 3, 6, 7, 9 }, acceptedRecords[3]);
         }
 
-        //[TestMethod]
-        //public void Test_CombiOfNonSortedLevelDiffAndRemovedAscDesc() 
-        //{
-        //    // Arrange
-        //    List<int[]> reports = new List<int[]>
-        //    {
-        //        new int[] { 7, 6, 4, 2, 1 },
-        //        new int[] { 1, 2, 7, 8, 9 },
-        //        new int[] { 9, 7, 6, 2, 1 },
-        //        new int[] { 1, 3, 2, 4, 5 },
-        //        new int[] { 8, 6, 4, 4, 1 },
-        //        new int[] {1, 3, 6, 7, 9 }
-        //    };
+        [TestMethod]
+        public void Test_CombiOfMaxOneLevelDiffAndAcdDescError() 
+        {
+            // Arrange
+            List<int[]> reports = new List<int[]>
+            {
+                new int[] { 7, 6, 4, 2, 1 },    // not changed
+                new int[] { 1, 2, 7, 8, 9 },    // error
+                new int[] { 9, 7, 6, 2, 1 },    // error
+                new int[] { 1, 3, 2, 4, 5 },    // not changed
+                new int[] { 8, 6, 4, 4, 1 },    // removed 4
+                new int[] {1, 3, 6, 7, 9 }      // not changed
+            };
 
-        //    //Act
-        //    List<int[]> okLevelDiff = CodeDayTwo
-        //                           .ReportsWithOKLevelDifferences(reports);
+        //Act
+            (List<int[]>, List<int[]>) acceptedRecords = CodeDayTwo.ReportsWithMaxOneRejectedLevelDifferences(reports);
 
-        //    int safeReports1 = CodeDayTwo
-        //                        .ReportsWithMaxOneAscOrDescErrorLevel(okLevelDiff);
+            List<int[]> notChangedReports = acceptedRecords.Item1;
+            List<int[]> changedReports = acceptedRecords.Item2;
+
+            int safeReportsPartOne = (CodeDayTwo.ReportsWithMaxOneAscOrDescErrorLevel(notChangedReports)).Item1;
+            int safeReportsPartTwo = CodeDayTwo.ReportsWithAllLevelsAscOrDesc(changedReports);
+
+            int safeReportsTotal = safeReportsPartOne + safeReportsPartTwo;
 
 
-        //    //Assert
-        //    Assert.AreEqual(3, safeReports1);
-        //}
+            //Assert
+            Assert.AreEqual(4, safeReportsTotal);
+        }
 
-        //[TestMethod]    
-        //public void Test_CombiOfRemovedLevelDiffAndNotSortedAscDesc() 
-        //{
-        //    // Arrange
-        //    List<int[]> reports = new List<int[]>
-        //    {
-        //        new int[] { 7, 6, 4, 2, 1 },
-        //        new int[] { 1, 2, 7, 8, 9 },
-        //        new int[] { 9, 7, 6, 2, 1 },
-        //        new int[] { 1, 3, 2, 4, 5 },
-        //        new int[] { 8, 6, 4, 4, 1 },
-        //        new int[] {1, 3, 6, 7, 9 }
-        //    };
+        
 
-        //    //Act
 
-        //    List<int[]> levelDiffRemoved = CodeDayTwo
-        //                                     .ReportsWithMaxOneRejectedLevelDifferences(reports);
-
-        //    int safeReports2 = CodeDayTwo
-        //                        .ReportsWithAllLevelsAscOrDesc(levelDiffRemoved);
-
-        //    //Assert
-        //    Assert.AreEqual(4, safeReports2);
-
-        //}
 
     }
 }

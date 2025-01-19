@@ -38,21 +38,15 @@ class Program
         // *** part TWO ***
 
 
-        //List<int[]> okLevelDiff= CodeDayTwo
-        //                           .ReportsWithOKLevelDifferences(inputArrays);
+        (List<int[]>, List<int[]>) acceptedRecords = CodeDayTwo.ReportsWithMaxOneRejectedLevelDifferences(inputArrays);
 
-        //int safeReports1 = CodeDayTwo
-        //                    .ReportsWithMaxOneAscOrDescErrorLevel(okLevelDiff);
+        List<int[]> notChangedReports = acceptedRecords.Item1;
+        List<int[]> changedReports = acceptedRecords.Item2;
 
-        //List<int[]> levelDiffRemoved= CodeDayTwo
-        //                                .ReportsWithMaxOneRejectedLevelDifferences(inputArrays);
+        int safeReportsPartOne = (CodeDayTwo.ReportsWithMaxOneAscOrDescErrorLevel(notChangedReports)).Item1;
+        int safeReportsPartTwo = CodeDayTwo.ReportsWithAllLevelsAscOrDesc(changedReports);
 
-        //int safeReports2 = CodeDayTwo
-        //                    .ReportsWithAllLevelsAscOrDesc(levelDiffRemoved);
-
-
-
-        //Console.WriteLine($"Total accepted reportsNow: {safeReports1}, {safeReports2}");
+        Console.WriteLine($"Safe reports: {safeReportsPartOne + safeReportsPartTwo}");
 
 
 
