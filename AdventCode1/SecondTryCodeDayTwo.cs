@@ -1,4 +1,6 @@
 ﻿
+using System.Linq;
+
 namespace AdventCode2024
 {
     public class SecondTryCodeDayTwo
@@ -53,39 +55,83 @@ namespace AdventCode2024
 
         }
 
-        //public static int  OneDiffErrorCanBeAcccepted(int[] reportArray)
-        //{
+        public static int[] DeleteOneAscDescError(int[] reportArray)
+        {
+            int asc = 0;
+            int desc = 0;
 
-        //    int counterOfDiffsNOTBetweenOneAndThreeIncl = 0;
+            for (int i = 1; i < reportArray.Length; i++)
+            {
+                if (reportArray[i] > reportArray[i - 1])
+                {
+                    asc++;
+                }
+                if (reportArray[i] < reportArray[i - 1])
+                {
+                    desc++;
+                }
 
+            }
 
-        //    for (int i = 1; i < reportArray.Length; i++)
-        //    {
-        //        if (!(Math.Abs(reportArray[i] - reportArray[i - 1]) >= 1 && Math.Abs(reportArray[i] - reportArray[i - 1]) <= 3))
-        //        {
+            List<int> reportList = reportArray.ToList();
 
-        //            counterOfDiffsNOTBetweenOneAndThreeIncl++;  
-        //            break;
-        //        }
+            if (asc > desc)  // If asc array, delete the desc element
+            {
+                for (int i = 1; i < reportList.Count; i++)
+                {
+                    if (reportList[i] < reportList[i - 1])
+                    {
+                        reportList.RemoveAt(i - 1);
+                    }
+                }
+            }
+            if (asc < desc)  // If desc array, delete the asc element
+            {
+                for (int i = 1; i < reportList.Count; i++)
+                {
+                    
+                    if (reportList[i] > reportList[i - 1])
+                    {
+                        reportList.RemoveAt(i - 1);
+                    }
+                }
+            }
+            return reportList.ToArray();
+        }
 
-        //    }
+        public static int[] DeleteOneLevelDiffError(int[] reportArray)
+        {          
+            
+            List<int> reportList = reportArray.ToList();
+            for (int i = 1; i < reportList.Count; i++)
+            {
+                if (Math.Abs(reportList[i] - reportList[i - 1]) > 3)
+                {
+                    List<int> reportListCopy = reportList;
 
-        //    switch (counterOfDiffsNOTBetweenOneAndThreeIncl)
-        //    {
-        //        case 0:
-        //            // Handle when counterOfDiffsNOTBetweenOneAndThreeIncl is 0
-        //            break;
-        //        case 1:
-        //            // Handle when counterOfDiffsNOTBetweenOneAndThreeIncl is 1
-        //            break;
-        //        case 2:
-        //            // Handle when counterOfDiffsNOTBetweenOneAndThreeIncl is 2
-        //            break;
-        //        default:
-        //            // Handle when counterOfDiffsNOTBetweenOneAndThreeIncl is greater than 2
-        //            break;
-        //    }
-        //    return counterOfDiffsNOTBetweenOneAndThreeIncl;
+                    int[] refactoredArray = RemoveAt(i - 1, reportListCopy);
+                    if (refactoredArray != null)
+                    {
+                        return refactoredArray;
+                    }
 
-    }
+                    refactoredArray = RemoveAt(i, reportList);
+                    if (refactoredArray != null)
+                    {
+                        return refactoredArray;
+                    }
+                }
+            }
+            return reportArray;
+        }
+
+        public static int[] RemoveAt(int index, List<int> actualList)
+        {
+            actualList.RemoveAt(index);
+            bool reportNowSafe = actualList.Zip(actualList.Skip(1), (a, b) => Math.Abs(a - b) <= 3).All(x => x);
+            int[] refactoredArray = reportNowSafe ? actualList.ToArray() : null;
+            return refactoredArray;
+        }
+    }   
+
 }

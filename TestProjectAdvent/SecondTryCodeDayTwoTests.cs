@@ -30,20 +30,35 @@ namespace TestProjectAdvent
 
             //Assert
             Assert.AreEqual(expectedCounter, counter);
-
         }
 
-        //[TestMethod]
-        //[DataRow(new int[] { 7, 6, 4, 2, 1 }, 0)]
-        //public void OneLevelErrorCanBeAccepted(int[] reportArray,  int counterOfDiffsNOTBetweenOneAndThreeIncl)
-        //{
-        //    //Act
-        //    int result = SecondTryCodeDayTwo.OneDiffErrorCanBeAcccepted(reportArray);
 
-        //    //Assert
-            
-        //    Assert.AreEqual(counterOfDiffsNOTBetweenOneAndThreeIncl, result);
-           
-        //}
+
+        [TestMethod]
+        [DataRow(new int[] { 1, 6, 4, 2, 1 }, new int[] {6, 4, 2, 1})]
+        [DataRow(new int[] { 8, 6, 1, 4, 1 }, new int[] {8, 6, 4, 1})]
+        public void Test_DeleteOneAscDescError(int[] reportArray, int[] expRefactoredArray)
+        {
+            //Act
+            int[] refactoredArray = SecondTryCodeDayTwo.DeleteOneAscDescError(reportArray);
+            //Assert
+            CollectionAssert.AreEqual(expRefactoredArray, refactoredArray);
+        }
+
+        [TestMethod]
+        //[DataRow(new int[] { 0, 6, 4, 2, 1 }, new int[] { 6, 4, 2, 1 })]
+        [DataRow(new int[] { 8, 6, 1, 4, 1 }, new int[] { 8, 6, 4, 1 })]
+
+
+        public void Test_DeleteOneLevelDiffError(int[] reportArray, int[] expRefactoredArray)
+        {
+            //Act
+            int[] refactoredArray = SecondTryCodeDayTwo.DeleteOneLevelDiffError(reportArray);
+
+            //Assert
+            CollectionAssert.AreEqual(expRefactoredArray, refactoredArray);
+        }
+
+
     }
 }
