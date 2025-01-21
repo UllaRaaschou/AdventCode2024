@@ -200,8 +200,10 @@ namespace AdventCode2024
             return (counterOfAcceptedReports, acceptedReports);
         }
 
-
-        
+        public static int ArrayPassingAscDescControl(int[] inputArray, bool oneLevelIsDeleted)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
 
