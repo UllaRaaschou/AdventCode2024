@@ -10,36 +10,41 @@ namespace AdventCode2024
         // Max one level must be ignored
         public static int CounterOfdiffsBetweenOneAndThreeIncl(int[] reportArray)
         {
-            int counter = 0;
-
-            for (int i = 1; i < reportArray.Length; i++)
+            if(reportArray.Length > 0)
             {
-                if (!(Math.Abs(reportArray[i] - reportArray[i - 1]) >= 1 && Math.Abs(reportArray[i] - reportArray[i - 1]) <= 3))
+                int counter = 0;
+
+                for (int i = 1; i < reportArray.Length; i++)
                 {
-                    counter++;
-                    if(counter > 2)
+                    if (!(Math.Abs(reportArray[i] - reportArray[i - 1]) >= 1 && Math.Abs(reportArray[i] - reportArray[i - 1]) <= 3))
                     {
-                        return counter;
+                        counter++;
+                        if (counter > 2)
+                        {
+                            return counter;
+                        }
                     }
                 }
+                return counter;
             }
-            return counter;
+            return -1;
+
         }
 
-        public static (int[]?, bool) ArrayPassingLevelDiffControl(int[] inputArray)
+        public static (int[], bool) ArrayPassingLevelDiffControl(int[] inputArray)
         {
             int counterOfDiffsErrors = CounterOfdiffsBetweenOneAndThreeIncl(inputArray);
 
-            switch (counterOfDiffsErrors)
+            if(counterOfDiffsErrors == 0)
             {
-                case int x when x == 0:
-                    return (inputArray, false);
-                case int x when x == 1 || x == 2:
-                    return (DeleteOneLevelDiffError(inputArray), true);
-                default:
-                    return (null, false);
-                    break;
+                return (inputArray, false);
             }
+            if(counterOfDiffsErrors == 1 || counterOfDiffsErrors ==2)
+            {
+                return (DeleteOneLevelDiffError(inputArray), true);
+            }
+            return (new int [0], false);
+
         }
 
 
@@ -51,58 +56,33 @@ namespace AdventCode2024
             List<int> reportList = reportArray.ToList();
             for (int i = 1; i < reportList.Count; i++)
             {
-                if (Math.Abs(reportList[i] - reportList[i - 1]) > 3)
+                if (Math.Abs(reportList[i] - reportList[i - 1]) > 3 || (Math.Abs(reportList[i] - reportList[i - 1]) < 1))
                 {
 
-                    int[] refactoredArray = RemoveAt(i - 1, reportListCopy1);
+                    int[] refactoredArray = RemoveAtLevel(i - 1, reportListCopy1);
                     if (refactoredArray != null)
                     {
                         return refactoredArray;
                     }
 
-                    refactoredArray = RemoveAt(i, reportListCopy2);
+                    refactoredArray = RemoveAtLevel(i, reportListCopy2);
                     if (refactoredArray != null)
                     {
                         return refactoredArray;
                     }
+                    break;
                 }
             }
-            return null;
+            return new int[0];
         }
 
-
-
-        //public static int CounterOfDiffsNotfollowingAscDescPattern(int[] reportArray)
-        //{
-        //    int ascCounter = 0;
-        //    int descCounter = 0;
-        //    int notAscDescCounter = 0;
-
-        //    for (int i = 1; i < reportArray.Length; i++)
-        //    {
-        //        if (reportArray[i] > reportArray[i - 1])
-        //        {
-        //            descCounter++;
-        //        }
-        //        if (reportArray[i] < reportArray[i - 1])
-        //        {
-        //            ascCounter++;
-        //        }
-        //        if (reportArray[i] == reportArray[i - 1])
-        //        {
-        //            notAscDescCounter++;
-        //        }
-        //    }
-        //    if ((Math.Abs(ascCounter - descCounter) > 1) || (notAscDescCounter > 1))
-        //    {
-        //        int counterOfDominatingAscOrDescDiffs = Math.Max(ascCounter, descCounter);
-        //        int counterOfDiifsNotFollowingAscDescPattern = (reportArray.Length - 1) - counterOfDominatingAscOrDescDiffs;
-        //        return counterOfDiifsNotFollowingAscDescPattern;
-        //    }
-        //    return -1;
-
-        //}
-
+        public static int[] RemoveAtLevel(int index, List<int> actualList)
+        {
+            actualList.RemoveAt(index);
+            bool reportNowSafe = actualList.Zip(actualList.Skip(1), (a, b) => Math.Abs(a - b) <= 3).All(x => x);
+            int[] refactoredArray = reportNowSafe ? actualList.ToArray() : null;
+            return refactoredArray;
+        }
 
         public static bool AllReportIsAscOrDesc(int[]? reportArray)
         {
@@ -134,6 +114,8 @@ namespace AdventCode2024
             }
 
             List<int> reportList = reportArray.ToList();
+            List<int> reportListCopy1 = reportArray.ToList();
+            List<int> reportListCopy2 = reportArray.ToList();
 
             if (asc > desc)  // If asc array, delete the desc element
             {
@@ -141,66 +123,60 @@ namespace AdventCode2024
                 {
                     if (reportList[i] <= reportList[i - 1])
                     {
-                        reportList.RemoveAt(i - 1);
-                        int[] refactoredArray = reportList.ToArray();
+                        reportListCopy1.RemoveAt(i - 1);
+                        int[] refactoredArray = reportListCopy1.ToArray();
                         bool allNowDescOrAsc = AllReportIsAscOrDesc(refactoredArray);
                         if (allNowDescOrAsc)
                         {
                             return refactoredArray;
                         }
-                        reportList.RemoveAt(i);
-                        refactoredArray = reportList.ToArray();
+                        reportListCopy2.RemoveAt(i);
+                        refactoredArray = reportListCopy2.ToArray();
                         bool allNowDescOrAsc2 = AllReportIsAscOrDesc(refactoredArray);
                         if (allNowDescOrAsc2)
                         {
                             return refactoredArray;
                         }
+                        break;
                     }
                 }
-                if (asc < desc)  // If desc array, delete the asc element
+                return reportArray;
+            }
+            if (asc < desc)  // If desc array, delete the asc element
+            {
+                for (int i = 1; i < reportList.Count; i++)
                 {
-                    for (int i = 1; i < reportList.Count; i++)
+
+                    if (reportList[i] >= reportList[i - 1])
                     {
-
-                        if (reportList[i] >= reportList[i - 1])
+                        reportListCopy1.RemoveAt(i - 1);
+                        int[] refactoredArray = reportListCopy1.ToArray();
+                        bool allNowDescOrAsc = AllReportIsAscOrDesc(refactoredArray);
+                        if (allNowDescOrAsc)
                         {
-                            reportList.RemoveAt(i - 1);
-                            int[] refactoredArray = reportList.ToArray();
-                            bool allNowDescOrAsc = AllReportIsAscOrDesc(refactoredArray);
-                            if (allNowDescOrAsc)
-                            {
-                                return refactoredArray;
-                            }
-                            if (!allNowDescOrAsc)
-                            {
-                                reportList.RemoveAt(i);
-                                int[] refactoredArray2 = reportList.ToArray();
-                                bool allNowDescOrAsc2 = AllReportIsAscOrDesc(refactoredArray);
-                                if (allNowDescOrAsc2)
-                                {
-                                    return refactoredArray2;
-                                }
-
-
-                            }
-
+                            return refactoredArray;
                         }
+                        if (!allNowDescOrAsc)
+                        {
+                            reportListCopy2.RemoveAt(i);
+                            int[] refactoredArray2 = reportListCopy2.ToArray();
+                            bool allNowDescOrAsc2 = AllReportIsAscOrDesc(refactoredArray);
+                            if (allNowDescOrAsc2)
+                            {
+                                return refactoredArray2;
+                            }
+                        }
+                        break;
+
                     }
-                    
+
                 }
+                return reportList.ToArray();
             }
             return reportList.ToArray();
-        }
+        }     
 
         
-
-        public static int[] RemoveAt(int index, List<int> actualList)
-        {
-            actualList.RemoveAt(index);
-            bool reportNowSafe = actualList.Zip(actualList.Skip(1), (a, b) => Math.Abs(a - b) <= 3).All(x => x);
-            int[] refactoredArray = reportNowSafe ? actualList.ToArray() : null;
-            return refactoredArray;
-        }
 
         
 
@@ -231,12 +207,13 @@ namespace AdventCode2024
 
         public static bool PassingLevelDiffAndAscDescControl(int[] inputArray)
         {
-            (int[]?, bool) SAFEReportAccordingToLevelDiffs = ArrayPassingLevelDiffControl(inputArray);
+            (int[], bool) SAFEReportAccordingToLevelDiffs = ArrayPassingLevelDiffControl(inputArray);
+            if (SAFEReportAccordingToLevelDiffs.Item1.Length == 0)
+            {
+                return false;
+            }
             bool finalReportIsSAFE = PassingAscDescControlGivesFinalResult(SAFEReportAccordingToLevelDiffs.Item1, SAFEReportAccordingToLevelDiffs.Item2);
             return finalReportIsSAFE;
-
-
-
         }
 
         public static int Puzzle(List<int[]> recordsArrayList)

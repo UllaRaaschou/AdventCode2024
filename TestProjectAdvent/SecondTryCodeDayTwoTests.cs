@@ -6,8 +6,9 @@ namespace TestProjectAdvent
     public class SecondTryCodeDayTwoTests
     {
         [TestMethod]
-        [DataRow(new int[] { 7, 6, 4, 2, 1 }, 0)]
-        [DataRow(new int[] { 1, 2, 7, 8, 9 }, 1)]
+        //[DataRow(new int[] { 7, 6, 4, 2, 1 }, 0)]
+        //[DataRow(new int[] { 1, 2, 7, 8, 9 }, 1)]
+        [DataRow(new int[] { 8, 6, 4, 4, 1 }, 1)]
         public void Test_CounterOfdiffsBetweenOneAndThreeIncl(int[] reportArray, int expectedCounter)
         {
             //Act
@@ -18,8 +19,9 @@ namespace TestProjectAdvent
         }
 
         [TestMethod]
-        [DataRow(new int[] { 0, 6, 4, 2, 1 }, new int[] { 6, 4, 2, 1 })]
-        [DataRow(new int[] { 8, 6, 1, 4, 1 }, new int[] { 8, 6, 4, 1 })]
+        //[DataRow(new int[] { 0, 6, 4, 2, 1 }, new int[] { 6, 4, 2, 1 })]
+        //[DataRow(new int[] { 8, 6, 1, 4, 1 }, new int[] { 8, 6, 4, 1 })]
+        [DataRow(new int[] { 8, 6, 4, 4, 1 }, new int[] { 8, 6, 4, 1 })]
         public void Test_DeleteOneLevelDiffError(int[] reportArray, int[] expRefactoredArray)
         {
             //Act
@@ -56,8 +58,9 @@ namespace TestProjectAdvent
         }
 
         [TestMethod]
-        [DataRow(new int[] { 1, 6, 4, 2, 1 }, new int[] { 6, 4, 2, 1 })]
-        [DataRow(new int[] { 8, 6, 1, 4, 1 }, new int[] { 8, 6, 4, 1 })]
+        //[DataRow(new int[] { 1, 6, 4, 2, 1 }, new int[] { 6, 4, 2, 1 })]
+        //[DataRow(new int[] { 8, 6, 1, 4, 1 }, new int[] { 8, 6, 4, 1 })]
+        [DataRow(new int[] { 10, 11, 13, 16, 15 }, new int[] { 10, 11, 13, 15 })]
         public void Test_DeleteOneAscDescError(int[] reportArray, int[] expRefactoredArray)
         {
             //Act
@@ -109,13 +112,14 @@ namespace TestProjectAdvent
             Assert.AreEqual(expectedSafeStatus, finalReportIsSAFE);
         }
 
-        [TestMethod]
-        //[DataRow(new int[] { 7, 6, 4, 2, 1 }, 1)]
-        //[DataRow(new int[] { 1, 2, 7, 8, 9 }, 0)]
-        //[DataRow(new int[] { 9, 7, 6, 2, 1 }, 0)]
-        //[DataRow(new int[] { 1, 3, 2, 4, 5 }, 1)]
-        [DataRow(new int[] { 8, 6, 4, 4, 1 }, 1)]
 
+        [TestMethod]
+        [DataRow(new int[] { 7, 6, 4, 2, 1 }, 1)]
+        [DataRow(new int[] { 1, 2, 7, 8, 9 }, 0)]
+        [DataRow(new int[] { 9, 7, 6, 2, 1 }, 0)]
+        [DataRow(new int[] { 1, 3, 2, 4, 5 }, 1)]
+        [DataRow(new int[] { 8, 6, 4, 4, 1 }, 1)]
+        [DataRow(new int[] { 1, 3, 6, 7, 9 }, 1)]
 
         public void PuzzleTest(int[] inputArray1,  int expectedResult) 
         {
@@ -129,8 +133,31 @@ namespace TestProjectAdvent
 
             //Assert
             Assert.AreEqual(expectedResult, result);
-
-
         }
+
+
+
+
+        [TestMethod]
+        public void PuzzleTestWithListOfArrays()
+        {
+            //Arrange
+            List<int[]> recordsArrayList = new List<int[]>();
+            recordsArrayList.Add(new int[] { 7, 6, 4, 2, 1 });
+            recordsArrayList.Add(new int[] { 1, 2, 7, 8, 9 });
+            recordsArrayList.Add(new int[] { 9, 7, 6, 2, 1 });
+            recordsArrayList.Add(new int[] { 1, 3, 2, 4, 5 });
+            recordsArrayList.Add(new int[] { 8, 6, 4, 4, 1 });
+            recordsArrayList.Add(new int[] { 1, 3, 6, 7, 9 });
+           
+
+            //Act
+            int result = SecondTryCodeDayTwo.Puzzle(recordsArrayList);
+
+            //Assert
+            Assert.AreEqual(4, result);
+        }
+
+
     }
 }

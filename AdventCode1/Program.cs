@@ -1,9 +1,10 @@
 ﻿using AdventCode2024;
+using TestProjectAdvent;
 class Program
 {
     static void Main()
     {
-                                            // DAY ONE ********
+        // DAY ONE ********
 
         //(int[]array1, int[]array2) columns = CodeDayOne
         //                                            .ConvertInputColumnsToArraysOrderedAsc(
@@ -21,7 +22,7 @@ class Program
         //Console.WriteLine($"simularityproduct: {simularityProduct}");
 
 
-                                            // DAY TWO ********
+        // DAY TWO ********
 
         List<int[]> inputArrays = CodeDayTwo
                                   .ConvertStringsToArrays(
@@ -37,17 +38,21 @@ class Program
 
         // *** part TWO ***
 
+        int counter = 0; // Initialize counter variable
 
-        (List<int[]>, List<int[]>) acceptedRecords = CodeDayTwo.ReportsWithMaxOneRejectedLevelDifferences(inputArrays);
+        foreach (int[] inputArray in inputArrays)
+        {
+            (int[] outputArray, bool isSafe) = NewDayTwoCode.PuzzlePartTwo
+                
+                
+                (inputArray);
+            if (isSafe)
+            {
+                counter++;
+            }
+        }
 
-        List<int[]> notChangedReports = acceptedRecords.Item1;
-        List<int[]> changedReports = acceptedRecords.Item2;
-
-        int safeReportsPartOne = (CodeDayTwo.ReportsWithMaxOneAscOrDescErrorLevel(notChangedReports)).Item1;
-        int safeReportsPartTwo = CodeDayTwo.ReportsWithAllLevelsAscOrDesc(changedReports);
-
-        Console.WriteLine($"Safe reports: {safeReportsPartOne + safeReportsPartTwo}");
-
+        Console.WriteLine(counter); // Output the value of counter
 
 
     }
